@@ -14,7 +14,7 @@ class AutomaticCar extends Car { // overerven gebeurt via het ‘extends’ keyw
         this.#gearMode = newValue; 
         console.log(`Gear mode of automatic ${this.brand} with ID ${this.id} has been set to ${this.#gearMode}.`);
     } 
-    move() {
+    move(timeSpanInSec) {
         // Berekenen van de nieuwe gear position ...
         console.log(`Calculating recommended gear position of automatic ${this.brand} with ID ${this.id}...`);
         if (this.gear < 5) {

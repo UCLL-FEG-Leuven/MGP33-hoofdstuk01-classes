@@ -1,3 +1,5 @@
+const MAX_ACCELERATION_IN_METERS_SEC = 27.8;
+
 class Car { // een class naam begint steeds met een hoofdletter (= conventie)
     static #lastId = 0; // static geeft aan dat dit een class field is  en dus geen object field
 
@@ -11,6 +13,10 @@ class Car { // een class naam begint steeds met een hoofdletter (= conventie)
     #acceleratorPedalPosition;
     #brakePedalPosition;
 
+    #accelaration;
+    #speed;
+    #position;
+
     // slechts één constructor mogelijk. Bemerk het gebruik van this.
     constructor(brand, color, maxSpeed) { 
       this.#id = Car.#lastId++;
@@ -22,7 +28,11 @@ class Car { // een class naam begint steeds met een hoofdletter (= conventie)
       this.#gear = 0; 
       this.#acceleratorPedalPosition = 0; // ter info: position is een waarde tussen 0 en 1
       this.#brakePedalPosition = 0; // ter info: position is een waarde tussen 0 en 1
-      }
+
+      this.#accelaration = 0;
+      this.#speed = 0;
+      this.#position = 0;
+    }
 
     // Properties beginnen ook met een kleine letter (= conventie)
     get id() { return this.#id; }
@@ -67,11 +77,26 @@ class Car { // een class naam begint steeds met een hoofdletter (= conventie)
         console.log(`Gear down. Gear position of ${this.#brand} with ID ${this.id} is ${this.gear}.`);
     }
 
-    move() {
+    move(timeSpanInSec) {
         if (this.#started) {
-            console.log(`Moving ${this.#brand} with ID ${this.id}: gear=${this.gear}, accelerator (%)=${this.#acceleratorPedalPosition * 100}, brake (%)=${this.#brakePedalPosition * 100}.`);
+            // Versnelling (acceleration) is afhankelijk van pedaalposities. Als rempedaal harder wordt ingedrukt dan is de versnelling negatief (= vertraging)
+            let versnelling = MAX_ACCELERATION_IN_METERS_SEC * (this.#acceleratorPedalPosition - this.#brakePedalPosition);
+
+            // Berekenen van nieuwe snelheid op basis van de versnelling of vertraging
+            this.#speed = Math.min(this.#maxSpeed * (this.#gear * 5.0), this.#speed + versnelling * timeSpanInSec);
+
+            this.#position = this.#position * this.#speed * timeSpanInSec;
         } else {
-            console.log(`${this.#brand} with ID ${this.id} is not started.`);
-        }        
+            // Als de auto gestopt wordt tijdens het rijden: direct gestopt.
+            this.#accelaration = 0;
+            this.#speed = 0;
+        }
+
+        let li = document.getElementById(this.#id);
+        if (!li) {
+            document.getElementById('cars').innerHTML += `<li id="${this.#id}"></li>`;
+            li = document.getElementById(this.#id);
+        } 
+        li.innerHTML = `${this.#brand} with ID ${this.#id} is on position ${this.#position}`;
     }
   }
