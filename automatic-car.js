@@ -20,6 +20,6 @@ class AutomaticCar extends Car { // overerven gebeurt via het ‘extends’ keyw
         if (this.gear < 5) {
             this.gearUp();
         }        
-        super.move(); // een object methode op de parent roep je aan met super
+        super.move(timeSpanInSec); // vergeet timeSpanInSec niet door te geven!
     } 
   } 
