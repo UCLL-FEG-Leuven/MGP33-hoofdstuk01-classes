@@ -20,9 +20,9 @@ class Car { // een class naam begint steeds met een hoofdletter (= conventie)
 
       this.#started = false; 
       this.#gear = 0; 
-      this.#acceleratorPedalPosition = 0; // ter info: position is een waarde tussen 0 en 1
-      this.#brakePedalPosition = 0; // ter info: position is een waarde tussen 0 en 1
-      }
+      this.#acceleratorPedalPosition = 0; // ter info: position is een kommagetal tussen 0 en 1 (0: niet ingedrukt, 1: volledig ingedrukt).
+      this.#brakePedalPosition = 0; // ter info: position is een kommagetal tussen 0 en 1 (0: niet ingedrukt, 1: volledig ingedrukt).
+    }
 
     // Properties beginnen ook met een kleine letter (= conventie)
     get id() { return this.#id; }
@@ -32,13 +32,13 @@ class Car { // een class naam begint steeds met een hoofdletter (= conventie)
     get acceleratorPedalPosition() { return this.#acceleratorPedalPosition; }
     set acceleratorPedalPosition(newValue) {
         if (newValue < 0 || newValue > 1) 
-            throw "Gelieve een waarde (kommagetal) in het interval [0,1] te kiezen (1 = volledig ingedrukt)";
+            throw "Gelieve een waarde (kommagetal) in het interval [0,1] te kiezen.";
         this.#acceleratorPedalPosition = newValue;
     }
     get brakePedalPosition() { return this.#brakePedalPosition; }
     set brakePedalPosition(newValue) {
         if (newValue < 0 || newValue > 1) 
-            throw "Gelieve een waarde (kommagetal) in het interval [0,1] te kiezen (1 = volledig ingedrukt)";
+            throw "Gelieve een waarde (kommagetal) in het interval [0,1] te kiezen.";
         this.#brakePedalPosition = newValue;
     }
 
@@ -51,10 +51,6 @@ class Car { // een class naam begint steeds met een hoofdletter (= conventie)
     stop() {
         this.#started = stop;
         console.log(`${this.#brand} with ID ${this.id} stopped.`);
-    } 
-
-    move(pedalPosition) { 
-        console.log(`Speed pedal position of ${this.#brand} with ID ${this.id} is ${pedalPosition}%.`);
     } 
 
     gearUp() {        

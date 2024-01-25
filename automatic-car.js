@@ -1,5 +1,5 @@
 class AutomaticCar extends Car { // overerven gebeurt via het ‘extends’ keyword
-    #gearMode; // ter info: mogelijke waarden zijn Park, Reverse, Neutral, Drive, ...
+    #gearMode; // ter info: mogelijke waarden zijn P(ark), R(everse), N(eutral) en D(rive).
     constructor(brand, color, maxSpeed) {
       super(brand, color, maxSpeed); // verplicht: super roept de constructor van parent class Car aan.
       this.#gearMode = "P";
