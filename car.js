@@ -7,7 +7,6 @@ class Car {
     #brand;
     #color;
     #maxSpeed;
-    #maxSpeedInMetersPerSecond;
 
     #started;
     #gear;
@@ -23,7 +22,6 @@ class Car {
       this.#brand = brand; 
       this.#color = color; 
       this.#maxSpeed = maxSpeed;
-      this.#maxSpeedInMetersPerSecond = (maxSpeed * 1000) / 3600; // we gaan hier al een éénmalige omzetting doen. Het rekent handiger in meters per seconde.
 
       this.#started = false; 
       this.#gear = 0; 
@@ -78,12 +76,14 @@ class Car {
         if (this.#started) {
             // De huidige versnelling (acceleration) is afhankelijk van pedaalposities. 
             // Als het rempedaal harder wordt ingedrukt dan is de versnelling negatief (= vertraging)
-            let versnelling = MAX_ACCELERATION_IN_METERS_SEC * (this.#acceleratorPedalPosition - this.#brakePedalPosition);
+            this.#accelaration = MAX_ACCELERATION_IN_METERS_SEC * (this.#acceleratorPedalPosition - this.#brakePedalPosition);
 
             // Berekenen van nieuwe snelheid op basis van de versnelling of vertraging
             // Er wordt van uitgegaan dat elke gear in 20% extra snelheid zal resulteren.
             // Zo zal bij het bereiken van gear 5 100% van de maxspeed kunnen bereikt worden.
-            this.#speed = Math.min(this.#maxSpeedInMetersPerSecond * (this.#gear / 5.0), this.#speed + versnelling * timeSpanInSec);
+            // Opgelet: maxSpeed is in km/u -> we moeten het dus eerst omzetten naar m/s.
+            const maxSpeedInMetersPerSecond = (this.#maxSpeed * 1000) / 3600; 
+            this.#speed = Math.min(maxSpeedInMetersPerSecond * (this.#gear / 5.0), this.#speed + versnelling * timeSpanInSec);
 
             // De nieuwe positie: vorige positie + afstand die afgelegd werd over de timespan.
             this.#position = this.#position + this.#speed * timeSpanInSec;
