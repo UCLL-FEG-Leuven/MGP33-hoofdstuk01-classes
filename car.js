@@ -1,5 +1,3 @@
-const MAX_ACCELERATION_IN_METERS_SEC = 27.8;
-
 class Car {
     static #lastId = 0;
 
@@ -13,9 +11,7 @@ class Car {
     #acceleratorPedalPosition;
     #brakePedalPosition;
 
-    #acceleration;
-    #speed;
-    #position;
+    #liElement;
 
     constructor(brand, color, maxSpeed) { 
       this.#id = Car.#lastId++;
@@ -27,10 +23,6 @@ class Car {
       this.#gear = 0; 
       this.#acceleratorPedalPosition = 0; // ter info: position is een waarde tussen 0 en 1
       this.#brakePedalPosition = 0; // ter info: position is een waarde tussen 0 en 1
-
-      this.#acceleration = 0;
-      this.#speed = 0;
-      this.#position = 0;
     }
 
     // Properties beginnen ook met een kleine letter (= conventie)
@@ -72,34 +64,22 @@ class Car {
         console.log(`Gear down. Gear position of ${this.#brand} with ID ${this.id} is ${this.gear}.`);
     }
 
-    move(timeSpanInSec) {
+    move() {
         if (this.#started) {
-            // De huidige versnelling (acceleration) is afhankelijk van pedaalposities. 
-            // Als het rempedaal harder wordt ingedrukt dan is de versnelling negatief (= vertraging)
-            this.#acceleration = MAX_ACCELERATION_IN_METERS_SEC * (this.#acceleratorPedalPosition - this.#brakePedalPosition);
-
-            // Berekenen van nieuwe snelheid op basis van de versnelling of vertraging
-            // Er wordt van uitgegaan dat elke gear in 20% extra snelheid zal resulteren.
-            // Zo zal bij het bereiken van gear 5 100% van de maxspeed kunnen bereikt worden.
-            // Opgelet: maxSpeed is in km/u -> we moeten het dus eerst omzetten naar m/s.
-            const maxSpeedInMetersPerSecond = (this.#maxSpeed * 1000) / 3600; 
-            this.#speed = Math.min(maxSpeedInMetersPerSecond * (this.#gear / 5.0), this.#speed + this.#acceleration * timeSpanInSec);
-
-            // De nieuwe positie: vorige positie + afstand die afgelegd werd over de timespan.
-            this.#position = this.#position + this.#speed * timeSpanInSec;
+            console.log(`Moving ${this.#brand} with ID ${this.id}: gear=${this.gear}, accelerator (%)=${this.#acceleratorPedalPosition * 100}, brake (%)=${this.#brakePedalPosition * 100}.`);
         } else {
-            // Als de auto gestopt wordt tijdens het rijden: dan komt die onmiddellijk tot stilstand.
-            this.#acceleration = 0;
-            this.#speed = 0;
-        }
+            console.log(`${this.#brand} with ID ${this.id} is not started.`);
+        }  
+    }
 
+    renderOnPage(listElement) {
         // Elke auto is verantwoordelijk om 'zichzelf' te tonen op het scherm (als een <li>).
-        // De allereerste keer datn move() wordt aangeroepen bestaat er nog geen <li> en zal de car dus eentje aanmaken.
-        let li = document.getElementById(this.#id);
-        if (!li) {
-            document.getElementById('cars').innerHTML += `<li id="${this.#id}"></li>`;
-            li = document.getElementById(this.#id);
-        } 
-        li.innerHTML = `${this.#brand} with ID ${this.#id} is on position ${this.#position} (speed: ${(this.#speed * 3600) / 1000})`;
+        // De allereerste keer dat renderOnPage() wordt aangeroepen bestaat er nog geen <li> en zal de car dus eentje aanmaken.
+        // listElement is een <ol> of een <ul>: dat mag de caller beslissen.
+        if (!this.#liElement) {
+            listElement.innerHTML += `<li id="${this.#id}"></li>`;
+            this.#liElement = document.getElementById(this.#id);
+        }
+        this.#liElement.innerHTML = `${this.#brand} with ID ${this.#id}, color ${this.#color} and max speed ${this.#maxSpeed}.`;
     }
   }
