@@ -11,8 +11,13 @@ vw.gearMode = "D";
 vw.acceleratorPedalPosition = 1;
 
 let cars = [honda, audi, vw];
+let carsList = document.getElementById("cars");
 setInterval(() => {
     cars.forEach((car) => {
+        // Eerst berekenen wat de nieuwe positie is op basis van de versnelling.
         car.move(0.033); // 0.033 seconden = 33 msec (+/- 30 keer per seconde)
+
+        // Dan de nieuwe positie ook effectief tonen
+        car.renderOnPage(carsList);
     });
 }, 33);

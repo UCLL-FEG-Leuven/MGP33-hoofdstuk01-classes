@@ -17,6 +17,8 @@ class Car {
     #speed;
     #position;
 
+    #liElement;
+
     constructor(brand, color, maxSpeed) { 
       this.#id = Car.#lastId++;
       this.#brand = brand; 
@@ -92,14 +94,17 @@ class Car {
             this.#acceleration = 0;
             this.#speed = 0;
         }
-
-        // Elke auto is verantwoordelijk om 'zichzelf' te tonen op het scherm (als een <li>).
-        // De allereerste keer datn move() wordt aangeroepen bestaat er nog geen <li> en zal de car dus eentje aanmaken.
-        let li = document.getElementById(this.#id);
-        if (!li) {
-            document.getElementById('cars').innerHTML += `<li id="${this.#id}"></li>`;
-            li = document.getElementById(this.#id);
-        } 
-        li.innerHTML = `${this.#brand} with ID ${this.#id} is on position ${this.#position} (speed: ${(this.#speed * 3600) / 1000})`;
     }
+
+    renderOnPage(listElement) {
+        // Elke auto is verantwoordelijk om 'zichzelf' te tonen op het scherm (als een <li>).
+        // De allereerste keer dat renderOnPage() wordt aangeroepen bestaat er nog geen <li> en zal de car dus eentje aanmaken.
+        // listElement is een <ol> of een <ul>: dat mag de caller beslissen.
+        if (!this.#liElement) {
+            listElement.insertAdjacentHTML("beforeend", `<li id="${this.#id}"></li>`);
+            this.#liElement = document.getElementById(this.#id);
+        }
+        this.#liElement.innerHTML = `${this.#brand} with ID ${this.#id}, color ${this.#color} and max speed ${this.#maxSpeed}. The car is currently on position ${this.#position} (speed: ${(this.#speed * 3600) / 1000})`;
+
+    }    
   }
