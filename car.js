@@ -13,7 +13,7 @@ class Car {
     #acceleratorPedalPosition;
     #brakePedalPosition;
 
-    #accelaration;
+    #acceleration;
     #speed;
     #position;
 
@@ -28,7 +28,7 @@ class Car {
       this.#acceleratorPedalPosition = 0; // ter info: position is een waarde tussen 0 en 1
       this.#brakePedalPosition = 0; // ter info: position is een waarde tussen 0 en 1
 
-      this.#accelaration = 0;
+      this.#acceleration = 0;
       this.#speed = 0;
       this.#position = 0;
     }
@@ -76,20 +76,20 @@ class Car {
         if (this.#started) {
             // De huidige versnelling (acceleration) is afhankelijk van pedaalposities. 
             // Als het rempedaal harder wordt ingedrukt dan is de versnelling negatief (= vertraging)
-            this.#accelaration = MAX_ACCELERATION_IN_METERS_SEC * (this.#acceleratorPedalPosition - this.#brakePedalPosition);
+            this.#acceleration = MAX_ACCELERATION_IN_METERS_SEC * (this.#acceleratorPedalPosition - this.#brakePedalPosition);
 
             // Berekenen van nieuwe snelheid op basis van de versnelling of vertraging
             // Er wordt van uitgegaan dat elke gear in 20% extra snelheid zal resulteren.
             // Zo zal bij het bereiken van gear 5 100% van de maxspeed kunnen bereikt worden.
             // Opgelet: maxSpeed is in km/u -> we moeten het dus eerst omzetten naar m/s.
             const maxSpeedInMetersPerSecond = (this.#maxSpeed * 1000) / 3600; 
-            this.#speed = Math.min(maxSpeedInMetersPerSecond * (this.#gear / 5.0), this.#speed + versnelling * timeSpanInSec);
+            this.#speed = Math.min(maxSpeedInMetersPerSecond * (this.#gear / 5.0), this.#speed + this.#acceleration * timeSpanInSec);
 
             // De nieuwe positie: vorige positie + afstand die afgelegd werd over de timespan.
             this.#position = this.#position + this.#speed * timeSpanInSec;
         } else {
             // Als de auto gestopt wordt tijdens het rijden: dan komt die onmiddellijk tot stilstand.
-            this.#accelaration = 0;
+            this.#acceleration = 0;
             this.#speed = 0;
         }
 
