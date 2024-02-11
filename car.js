@@ -101,8 +101,8 @@ class Car {
         // De allereerste keer dat renderOnPage() wordt aangeroepen bestaat er nog geen <li> en zal de car dus eentje aanmaken.
         // listElement is een <ol> of een <ul>: dat mag de caller beslissen.
         if (!this.#liElement) {
-            listElement.insertAdjacentHTML("beforeend", `<li id="${this.#id}"></li>`);
-            this.#liElement = document.getElementById(this.#id);
+            listElement.insertAdjacentHTML("beforeend", `<li id="car${this.#id}"></li>`);
+            this.#liElement = document.getElementById(`car${this.#id}`);
         }
         this.#liElement.innerHTML = `${this.#brand} with ID ${this.#id}, color ${this.#color} and max speed ${this.#maxSpeed}. The car is currently on position ${this.#position} (speed: ${(this.#speed * 3600) / 1000})`;
 
