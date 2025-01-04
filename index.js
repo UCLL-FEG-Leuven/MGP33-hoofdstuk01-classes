@@ -2,11 +2,11 @@ const aantalAutosSpan = document.getElementById("aantalAutos");
 let cars = [];
 
 setInterval(() => {
-    for (let i = 0; i < 100000; i++) {
-        cars.push(new Car("Honda", "Groen", 145));
-        aantalAutosSpan.innerText = cars.length;
+    for (let i = 0; i < 10000; i++) {
+        cars.push(new Car("Honda", "Groen", 145));        
     }
-}, 10);
+    aantalAutosSpan.innerText = cars.length;
+}, 1);
 
 // Alternatief maar zwaar belastend voor browser:
 // while (true) {
